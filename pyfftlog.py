@@ -184,12 +184,12 @@ from scipy.fftpack import rfft, irfft
 
 
 def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
-    """Initialize the working array wsave used by fftl, fht, and fhtq.
+    """Initialize the working array xsave used by fftl, fht, and fhtq.
 
-    fhti initializes the working array wsave used by fftl, fht, and fhtq.  fhti
+    fhti initializes the working array xsave used by fftl, fht, and fhtq.  fhti
     need be called once, whereafter fftl, fht, or fhtq may be called many
     times, as long as n, mu, q, dlnr, and kr remain unchanged. fhti should be
-    called each time n, mu, q, dlnr, or kr is changed. The work array wsave
+    called each time n, mu, q, dlnr, or kr is changed. The work array xsave
     should not be changed between calls to fftl, fht, or fhtq.
 
     Parameters
@@ -232,12 +232,11 @@ def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
     kr : float, optional
         kr, adjusted depending on kropt.
 
-    wsave : array
+    xsave : array
         Working array used by fftl, fht, and fhtq. Dimension:
-        - for q = 0 (unbiased transform): 2*(n/2)+3
-            [= n+3 if n even, n+2 if n odd]
-        - for q != 0 (biased transform): 3*(n/2)+4
-            [= (3*n)/2+4 if n even, (3*n)/2+3 if n odd]
+        - for q = 0 (unbiased transform): n+3
+        - for q != 0 (biased transform): 1.5*n+4
+        If odd, last element is not needed.
 
     """
 
@@ -272,8 +271,8 @@ def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
 
     # The normal FFT is not initialized here as in the original FFTLog code, as
     # the `scipy.fftpack`-FFT routines `rfft` and `irfft` do that internally.
-    # Therefore wsave in `pyfftlog` is 2*n+15 elements shorter, and named
-    # xsave to not confuse it with wsave from the FFT.
+    # Therefore xsave in `pyfftlog` is 2*n+15 elements shorter, and named
+    # xsave to not confuse it with xsave from the FFT.
 
     if q == 0:  # unbiased case (q = 0)
         ln2kr = np.log(2.0/kr)
@@ -286,8 +285,12 @@ def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
         arg = 2.0*(ln2kr*y + zp.imag)  # Argument of kr^(-2 i y) U_mu(2 i y)
 
         # Arange xsave: [q, dlnr, kr, cos, sin]
-        xsave = np.r_[q, dlnr, kr,
-                      np.stack((np.cos(arg), np.sin(arg)), -1).ravel()]
+        xsave = np.empty(2*arg.size+3)
+        xsave[0] = q
+        xsave[1] = dlnr
+        xsave[2] = kr
+        xsave[3::2] = np.cos(arg)
+        xsave[4::2] = np.sin(arg)
 
         # Altogether 3 + 2*(n/2) elements used for q = 0, which is n+3 for even
         # n, n+2 for odd n.
@@ -365,12 +368,18 @@ def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
         arg = 2*ln2kr*y + zp.imag + zm.imag
 
         # Arrange xsave: [q, dlnr, kr, xsave1, cos, sin]
-        xsave = np.r_[q, dlnr, kr, xsave1,
-                      np.stack((amp, np.cos(arg), np.sin(arg)), -1).ravel()]
+        xsave = np.empty(3*arg.size+4)
+        xsave[0] = q
+        xsave[1] = dlnr
+        xsave[2] = kr
+        xsave[3] = xsave1
+        xsave[4::3] = amp
+        xsave[5::3] = np.cos(arg)
+        xsave[6::3] = np.sin(arg)
 
         # Altogether 3 + 3*(n/2)+1 elements used for q != 0, which is (3*n)/2+4
         # for even n, (3*n)/2+3 for odd n.  For even n, the very last element
-        # of wsave [i.e. wsave(3*m+1)=sin(arg) for m=n/2] is not used within
+        # of xsave [i.e. xsave(3*m+1)=sin(arg) for m=n/2] is not used within
         # FFTLog; if a low-ringing kr is used, this element should be zero.
         # The last element is computed in case somebody wants it.
 
