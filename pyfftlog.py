@@ -180,7 +180,9 @@ Comments in the subroutines contain further details.
 """
 import numpy as np
 from scipy.special import loggamma
-from scipy.fftpack import rfft, irfft
+from scipy.fftpack._fftpack import drfft
+# from scipy.fftpack import rfft, irfft
+# from scipy.fftpack.basic import _raw_fft
 
 
 def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
@@ -594,7 +596,9 @@ def fhtq(a, xsave, tdir=1):
     n = a.size
 
     # normal FFT
-    a = rfft(a)
+    # a = rfft(a)
+    # _raw_fft(a, n, -1, 1, 1, _fftpack.drfft)
+    a = drfft(a, n, 1, 0)
 
     m = np.arange(1, n/2, dtype=int)  # index variable
     if q == 0:  # unbiased (q = 0) transform
@@ -660,7 +664,9 @@ def fhtq(a, xsave, tdir=1):
                 a[-1] /= ar
 
     # normal FFT back
-    a = irfft(a)
+    # a = irfft(a)
+    # _raw_fft(a, n, -1, -1, 1, _fftpack.drfft)
+    a = drfft(a, n, -1, 1)
 
     # reverse the array and at the same time undo the FFTs' multiplication by n
     # => Just reverse the array, the rest is already done in drfft.
