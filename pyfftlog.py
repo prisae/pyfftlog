@@ -454,27 +454,28 @@ def fftl(a, xsave, rk=1, tdir=1):
         Transformed array Ã(k): a(j) is Ã(k_j) at k_j = k_c exp[(j-jc) dlnr].
 
     """
+    fct = a.copy()
     q = xsave[0]
     dlnr = xsave[1]
     kr = xsave[2]
 
     # centre point of array
-    jc = np.array((a.size + 1)/2.0)
-    j = np.arange(a.size)+1
+    jc = np.array((fct.size + 1)/2.0)
+    j = np.arange(fct.size)+1
 
     # a(r) = A(r) (r/rc)^[-dir*(q-.5)]
-    a *= np.exp(-tdir*(q - 0.5)*(j - jc)*dlnr)
+    fct *= np.exp(-tdir*(q - 0.5)*(j - jc)*dlnr)
 
     # transform a(r) -> ã(k)
-    a = fhtq(a, xsave, tdir)
+    fct = fhtq(fct, xsave, tdir)
 
     # Ã(k) = ã(k) k^[-dir*(q+.5)] rc^[-dir*(q-.5)]
     #      = ã(k) (k/kc)^[-dir*(q+.5)] (kc rc)^(-dir*q) (rc/kc)^(dir*.5)
     lnkr = np.log(kr)
     lnrk = np.log(rk)
-    a *= np.exp(-tdir*((q + 0.5)*(j - jc)*dlnr + q*lnkr - lnrk/2.0))
+    fct *= np.exp(-tdir*((q + 0.5)*(j - jc)*dlnr + q*lnkr - lnrk/2.0))
 
-    return a
+    return fct
 
 
 def fht(a, xsave, tdir=1):
@@ -529,6 +530,7 @@ def fht(a, xsave, tdir=1):
         Transformed array Ã(k): a(j) is Ã(k_j) at k_j = k_c exp[(j-jc) dlnr].
 
     """
+    fct = a.copy()
     q = xsave[0]
     dlnr = xsave[1]
     kr = xsave[2]
@@ -536,20 +538,20 @@ def fht(a, xsave, tdir=1):
     # a(r) = A(r) (r/rc)^(-dir*q)
     if q != 0:
         #  centre point of array
-        jc = np.array((a.size + 1)/2.0)
-        j = np.arange(a.size)+1
-        a *= np.exp(-tdir*q*(j - jc)*dlnr)
+        jc = np.array((fct.size + 1)/2.0)
+        j = np.arange(fct.size)+1
+        fct *= np.exp(-tdir*q*(j - jc)*dlnr)
 
     # transform a(r) -> ã(k)
-    a = fhtq(a, xsave, tdir)
+    fct = fhtq(fct, xsave, tdir)
 
     # Ã(k) = ã(k) (k rc)^(-dir*q)
     #      = ã(k) (k/kc)^(-dir*q) (kc rc)^(-dir*q)
     if q != 0:
         lnkr = np.log(kr)
-        a *= np.exp(-tdir*q*((j - jc)*dlnr + lnkr))
+        fct *= np.exp(-tdir*q*((j - jc)*dlnr + lnkr))
 
-    return a
+    return fct
 
 
 def fhtq(a, xsave, tdir=1):
@@ -592,47 +594,48 @@ def fhtq(a, xsave, tdir=1):
         dlnr].
 
     """
+    fct = a.copy()
     q = xsave[0]
-    n = a.size
+    n = fct.size
 
     # normal FFT
-    # a = rfft(a)
-    # _raw_fft(a, n, -1, 1, 1, _fftpack.drfft)
-    a = drfft(a, n, 1, 0)
+    # fct = rfft(fct)
+    # _raw_fft(fct, n, -1, 1, 1, _fftpack.drfft)
+    fct = drfft(fct, n, 1, 0)
 
     m = np.arange(1, n/2, dtype=int)  # index variable
     if q == 0:  # unbiased (q = 0) transform
         # multiply by (kr)^[- i 2 m pi/(n dlnr)] U_mu[i 2 m pi/(n dlnr)]
-        ar = a[2*m-1]
-        ai = a[2*m]
-        a[2*m-1] = ar*xsave[2*m+1] - ai*xsave[2*m+2]
-        a[2*m] = ar*xsave[2*m+2] + ai*xsave[2*m+1]
+        ar = fct[2*m-1]
+        ai = fct[2*m]
+        fct[2*m-1] = ar*xsave[2*m+1] - ai*xsave[2*m+2]
+        fct[2*m] = ar*xsave[2*m+2] + ai*xsave[2*m+1]
         # problem(2*m)atical last element, for even n
         if np.mod(n, 2) == 0:
             ar = xsave[-2]
             if (tdir == 1):  # forward transform: multiply by real part
                 # Why? See http://casa.colorado.edu/~ajsh/FFTLog/index.html#ure
-                a[-1] *= ar
+                fct[-1] *= ar
             elif (tdir == -1):  # backward transform: divide by real part
                 # Real part ar can be zero for maximally bad choice of kr.
                 # This is unlikely to happen by chance, but if it does, policy
                 # is to let it happen.  For low-ringing kr, imaginary part ai
                 # is zero by construction, and real part ar is guaranteed
                 # nonzero.
-                a[-1] /= ar
+                fct[-1] /= ar
 
     else:  # biased (q != 0) transform
         # multiply by (kr)^[- i 2 m pi/(n dlnr)] U_mu[q + i 2 m pi/(n dlnr)]
         # phase
-        ar = a[2*m-1]
-        ai = a[2*m]
-        a[2*m-1] = ar*xsave[3*m+2] - ai*xsave[3*m+3]
-        a[2*m] = ar*xsave[3*m+3] + ai*xsave[3*m+2]
+        ar = fct[2*m-1]
+        ai = fct[2*m]
+        fct[2*m-1] = ar*xsave[3*m+2] - ai*xsave[3*m+3]
+        fct[2*m] = ar*xsave[3*m+3] + ai*xsave[3*m+2]
 
         if tdir == 1:  # forward transform: multiply by amplitude
-            a[0] *= xsave[3]
-            a[2*m-1] *= xsave[3*m+1]
-            a[2*m] *= xsave[3*m+1]
+            fct[0] *= xsave[3]
+            fct[2*m-1] *= xsave[3*m+1]
+            fct[2*m] *= xsave[3*m+1]
 
         elif tdir == -1:  # backward transform: divide by amplitude
             # amplitude of m=0 element
@@ -641,38 +644,38 @@ def fhtq(a, xsave, tdir=1):
                 # Amplitude of m=0 element can be zero for some mu, q
                 # combinations (singular inverse); policy is to drop
                 # potentially infinite constant.
-                a[0] = 0
+                fct[0] = 0
             else:
-                a[0] /= ar
+                fct[0] /= ar
 
             # remaining amplitudes should never be zero
-            a[2*m-1] /= xsave[3*m+1]
-            a[2*m] /= xsave[3*m+1]
+            fct[2*m-1] /= xsave[3*m+1]
+            fct[2*m] /= xsave[3*m+1]
 
         # problematical last element, for even n
         if np.mod(n, 2) == 0:
             m = int(n/2)
             ar = xsave[3*m+2]*xsave[3*m+1]
             if tdir == 1:  # forward transform: multiply by real part
-                a[-1] *= ar
+                fct[-1] *= ar
             elif (tdir == -1):  # backward transform: divide by real part
                 # Real part ar can be zero for maximally bad choice of kr.
                 # This is unlikely to happen by chance, but if it does, policy
                 # is to let it happen.  For low-ringing kr, imaginary part ai
                 # is zero by construction, and real part ar is guaranteed
                 # nonzero.
-                a[-1] /= ar
+                fct[-1] /= ar
 
     # normal FFT back
-    # a = irfft(a)
-    # _raw_fft(a, n, -1, -1, 1, _fftpack.drfft)
-    a = drfft(a, n, -1, 1)
+    # fct = irfft(fct)
+    # _raw_fft(fct, n, -1, -1, 1, _fftpack.drfft)
+    fct = drfft(fct, n, -1, 1)
 
     # reverse the array and at the same time undo the FFTs' multiplication by n
     # => Just reverse the array, the rest is already done in drfft.
-    a = a[::-1]
+    fct = fct[::-1]
 
-    return a
+    return fct
 
 
 def krgood(mu, q, dlnr, kr):
