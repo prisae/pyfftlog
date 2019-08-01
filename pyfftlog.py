@@ -603,7 +603,7 @@ def fhtq(a, xsave, tdir=1):
     # _raw_fft(fct, n, -1, 1, 1, _fftpack.drfft)
     fct = drfft(fct, n, 1, 0)
 
-    m = np.arange(1, n/2, dtype=int)  # index variable
+    m = np.arange(1, n//2, dtype=int)  # index variable
     if q == 0:  # unbiased (q = 0) transform
         # multiply by (kr)^[- i 2 m pi/(n dlnr)] U_mu[i 2 m pi/(n dlnr)]
         ar = fct[2*m-1]
