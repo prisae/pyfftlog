@@ -13,11 +13,11 @@
 
 .. sphinx-inclusion-marker
 
-`#pyfftlog` - python version of FFTLog
-=====================================
+A python version of FFTLog
+==========================
 
 This is a python version of the logarithmic FFT code *FFTLog* as presented in
-Appendix B of [Hamilton_2000]_ and published at `casa.colorado.edu/~ajsh/FFTLog
+Appendix B of Hamilton (2000) and published at `casa.colorado.edu/~ajsh/FFTLog
 <http://casa.colorado.edu/~ajsh/FFTLog>`_.
 
 A simple `f2py`-wrapper (`fftlog`) can be found on `github.com/prisae/fftlog
@@ -28,11 +28,10 @@ faster than `pyfftlog`, but `pyfftlog` is easier to implement, as you only need
 I hope that `FFTLog` will make it into `SciPy` in the future, which will make
 this project redundant.
 
-Be aware that `pyfftlog` has not been tested extensively. It works fine
-for the attached test, which is the test from the original code, and my use
-case, which is `pyfftlog.fftl` with `mu=0.5` (sine-transform), `q=0`
-(unbiased), `k=1`, `kropt=1`, and `tdir=` (forward). Please let me know if you
-encounter any issues.
+Be aware that `pyfftlog` has not been tested extensively. It works fine for the
+test from the original code, and my use case, which is `pyfftlog.fftl` with
+`mu=0.5` (sine-transform), `q=0` (unbiased), `k=1`, `kropt=1`, and `tdir=1`
+(forward). Please let me know if you encounter any issues.
 
 
 Description of FFTLog from the FFTLog-Website
@@ -53,24 +52,23 @@ steps) and aliasing (periodic folding of frequencies), but under appropriate
 circumstances FFTLog may approximate the results of a continuous Fourier or
 Hankel transform.
 
-The FFTLog algorithm was originally proposed by [Talman_1978]_.
+The FFTLog algorithm was originally proposed by Talman (1978).
 
-*For the full documentation, see*
-`casa.colorado.edu/~ajsh/FFTLog <http://casa.colorado.edu/~ajsh/FFTLog>`_.
+*For the full documentation, see* `casa.colorado.edu/~ajsh/FFTLog
+<http://casa.colorado.edu/~ajsh/FFTLog>`_.
 
 
 References
 ----------
 
-.. [Hamilton_2000] Hamilton, A. J. S., 2000, Uncorrelated modes of the
-    non-linear power spectrum: Monthly Notices of the Royal Astronomical
-    Society, 312, pages 257-284; DOI: `10.1046/j.1365-8711.2000.03071.x
-    <http://dx.doi.org/10.1046/j.1365-8711.2000.03071.x>`_; Website of FFTLog:
-    `casa.colorado.edu/~ajsh/FFTLog <http://casa.colorado.edu/~ajsh/FFTLog>`_.
+    Hamilton, A. J. S., 2000, Uncorrelated modes of the non-linear power
+    spectrum: Monthly Notices of the Royal Astronomical Society, 312, pages
+    257-284; DOI: `10.1046/j.1365-8711.2000.03071.x
+    <http://dx.doi.org/10.1046/j.1365-8711.2000.03071.x>`_.
 
-.. [Talman_1978] Talman, J. D., 1978, Numerical Fourier and Bessel transforms
-    in logarithmic variables: Journal of Computational Physics, 29, pages
-    35-48; DOI: `10.1016/0021-9991(78)90107-9
+    Talman, J. D., 1978, Numerical Fourier and Bessel transforms in logarithmic
+    variables: Journal of Computational Physics, 29, pages 35-48; DOI:
+    `10.1016/0021-9991(78)90107-9
     <http://dx.doi.org/10.1016/0021-9991(78)90107-9>`_.
 
 
@@ -79,4 +77,4 @@ License and Credits
 
 Released to the public domain under the `CC0 1.0 License
 <http://creativecommons.org/publicdomain/zero/1.0>`_. Be kind and give credits
-to [Hamilton_2000]_.
+by citing Hamilton (2000).

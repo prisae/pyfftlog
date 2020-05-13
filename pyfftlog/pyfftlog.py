@@ -1,32 +1,28 @@
-"""
+r"""
 
-`pyfftlog` -- Python version of FFTLog
-======================================
+:mod:`pyfftlog.pyfftlog` -- Python version of FFTLog
+====================================================
 
-This is a Python version of the FFTLog Fortran code by Andrew Hamilton:
+This is a Python version of the FFTLog Fortran code by Andrew Hamilton,
+[Hami00]_.
 
-Hamilton, A. J. S., 2000, Uncorrelated modes of the non-linear power spectrum:
-Monthly Notices of the Royal Astronomical Society, 312, pages 257-284; DOI:
-10.1046/j.1365-8711.2000.03071.x; Website of FFTLog:
-http://casa.colorado.edu/~ajsh/FFTLog.
-
-The function `scipy.special.loggamma` replaces the file `cdgamma.f` in the
-original code, and the functions `rfft` and `irfft` from `scipy.fftpack`
-replace the files `drffti.f`, `drfftf.f`, and `drfftb.f` in the original code.
+The function :func:`scipy.special.loggamma` replaces the file `cdgamma.f` in
+the original code, and the functions :func:`scipy.fftpack.rfft` and
+:func:`scipy.fftpack.irfft` replace the files `drffti.f`, `drfftf.f`, and
+`drfftb.f` in the original code.
 
 The original documentation has just been adjusted where necessary, and put into
 a more pythonic format (e.g. using 'Parameters' and 'Returns' in the
 documentation').
 
-***** From the original documentation *****
+Below the original documentation from `casa.colorado.edu/~ajsh/FFTLog
+<http://casa.colorado.edu/~ajsh/FFTLog>`_.
 
-===============================================================================
- THE FFTLog CODE
-===============================================================================
+THE FFTLog CODE
+---------------
 
-FFTLog
-    computes the discrete Fast Fourier Transform or Fast Hankel Transform (of
-    arbitrary real index) of a periodic logarithmic sequence.
+FFTLog computes the discrete Fast Fourier Transform or Fast Hankel Transform
+(of arbitrary real index) of a periodic logarithmic sequence.
 
 Version of 5 July 1999.
 
@@ -34,148 +30,171 @@ For more information about FFTLog, see http://casa.colorado.edu/~ajsh/FFTLog.
 
 Andrew J S Hamilton March 1999, email: Andrew.Hamilton@Colorado.EDU
 
-Refs: Talman J. D., 1978, J. Comp. Phys., 29, 35; Hamilton A. J. S., 2000,
-      MNRAS, 312, 257 (http://xxx.lanl.gov/abs/astro-ph/9905191)
+Refs: [Talm78]_
 
 FFTLog computes a discrete version of the Hankel Transform (= Fourier-Bessel
-Transform) with a power law bias (k r)^q
+Transform) with a power law bias :math:`(k r)^q`
 
-            infinity
-            /           q
-    ã(k) = | a(r) (k r)  J  (k r) k dr
-            /              mu
-            0
+.. math::
+    :label: ham1
 
-            infinity
-            /           -q
-    a(r) = | ã(k) (k r)   J  (k r) r dk
-            /               mu
-            0
+    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\mu} (k r) k dr
 
-where J_mu is the Bessel function of order mu.  The index mu may be any real
-number, positive or negative.
+.. math::
+    :label: ham2
 
-The input array a_j is a periodic sequence of length n, uniformly
-logarithmically spaced with spacing dlnr
-    a_j = a(r_j)   at   r_j = r_c exp[(j-j_c) dlnr]
-centred about the point r_c.  The central index j_c = (n+1)/2 is 1/2 integral
-if n is even.  Similarly, the output array ã_j is a periodic sequence of length
-n, also uniformly logarithmically spaced with spacing dlnr
-    ã_j = ã(k_j)   at   k_j = k_c exp[(j-j_c) dlnr]
-centred about the point k_c.
+    a(r) = \int^\infty_0 \tilde{a}(k) (k r)^{-q} J_{\mu} (k r) k dr
 
-The centre points r_c and k_c of the periodic intervals may be chosen
-arbitrarily; but it would be normal to choose the product
+where :math:`J_{\mu}` is the Bessel function of order :math:`\mu`. The index
+:math:`\mu` may be any real number, positive or negative.
+
+The input array :math:`a_j` is a periodic sequence of length :math:`n`,
+uniformly logarithmically spaced with spacing :math:`dlnr`
+
+.. math::
+    :label: ham3
+
+    a_j = a(r_j) \quad \text{at}   r_j = r_c \exp[(j-j_c) dlnr]
+
+centred about the point :math:`r_c`. The central index :math:`j_c = (n+1)/2` is
+1/2 integral if :math:`n` is even. Similarly, the output array
+:math:`\tilde{a}_j` is a periodic sequence of length :math:`n`, also uniformly
+logarithmically spaced with spacing :math:`dlnr`
+
+.. math::
+    :label: ham4
+
+    \tilde{a}_j = \tilde{a}(k_j) \quad \text{at} \quad
+    k_j = k_c \exp[(j-j_c) dlnr]
+
+centred about the point :math:`k_c`.
+
+The centre points :math:`r_c` and :math:`k_c` of the periodic intervals may be
+chosen arbitrarily; but it would be normal to choose the product
+
+.. math::
+    :label: ham5
+
     kr = k_c r_c = k_j r_(n+1-j) = k_(n+1-j) r_j
+
 to be about 1 (or 2, or pi, to taste).
 
-The FFTLog algorithm is (see Hamilton 2000):
-1. FFT the input array a_j to obtain the Fourier coefficients c_m ;
-2. Multiply c_m by
-        u_m = (kr)^[- i 2 m pi/(n dlnr)] U_mu[q + i 2 m pi/(n dlnr)]
-    where
-        U_mu(x) = 2^x Gamma[(mu+1+x)/2] / Gamma[(mu+1-x)/2]
-    to obtain c_m u_m ;
-3. FFT c_m u_m back to obtain the discrete Hankel transform ã_j .
+The FFTLog algorithm is (see [Hami00]_):
 
-----------------------------------------------------------------------
+1. FFT the input array :math:`a_j` to obtain the Fourier coefficients
+   :math:`c_m` ;
+2. Multiply :math:`c_m` by
+   :math:`u_m = (kr)^{- i 2 m \pi/(n dlnr)} U_{\mu}[q + i 2 m \pi/(n dlnr)]`
+   where :math:`U_{\mu}(x) = 2^x \Gamma[(\mu+1+x)/2] / \Gamma[(\mu+1-x)/2]` to
+   obtain :math:`c_m u_m`;
+3. FFT :math:`c_m u_m` back to obtain the discrete Hankel transform
+   :math:`\tilde{a}_j`.
+
 The Fourier sine and cosine transforms
+``````````````````````````````````````
 
-                    infinity
-                        /
-    Ã(k) = sqrt(2/pi) | A(r) sin(k r) dr
-                        /
-                    0
+.. math::
+    :label: ham6
 
-                    infinity
-                        /
-    Ã(k) = sqrt(2/pi) | A(r) cos(k r) dr
-                        /
-                    0
+    \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \sin(k r) dr
 
-may be regarded as special cases of the Hankel transform with mu = 1/2 and -1/2
-since
+.. math::
+    :label: ham7
 
-    sqrt(2/pi) sin(x) = sqrt(x) J   (x)
-                                1/2
+    \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \cos(k r) dr
 
-    sqrt(2/pi) cos(x) = sqrt(x) J    (x)
-                                -1/2
+may be regarded as special cases of the Hankel transform with :math:`\mu = 1/2`
+and :math:`-1/2` since
+
+.. math::
+    :label: ham8
+
+    \sqrt{2/\pi} \sin(x) = \sqrt(x) J_{1/2} (x)
+
+.. math::
+    :label: ham9
+
+    \sqrt{2/\pi} \cos(x) = \sqrt(x) J_{-1/2} (x)
+
 
 The Fourier transforms may be done by making the substitutions
-                q-(1/2)                      -q-(1/2)
-    A(r) = a(r) r          and   Ã(k) = ã(k) k
 
-and Hankel transforming a(r) with a power law bias (k r)^q
+.. math::
+    :label: ham10
 
-            infinity
-            /           q
-    ã(k) = | a(r) (k r)  J    (k r) k dr
-            /              ±1/2
-            0
+    A(r) = a(r) r^{q-1/2} \quad \text{and} \quad
+    \tilde{A}(k) = \tilde{a}(k) k^{-q-1/2}
 
-Different choices of power law bias q lead to different discrete Fourier
-transforms of A(r), because the assumption of periodicity of a(r) = A(r)
-r^[-q+(1/2)] is different for different q.
+and Hankel transforming :math:`a(r)` with a power law bias :math:`(k r)^q`
 
-If A(r) is a power law, A(r) proportional to r^[q-(1/2)], then applying a bias
-q yields a discrete Fourier transform Ã(k) that is exactly equal to the
-continuous Fourier transform, because then a(r) is a constant, which is a
-periodic function.
+.. math::
+    :label: ham11
 
-----------------------------------------------------------------------
+    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\pm 1/2} (k r) k dr
+
+Different choices of power law bias :math:`q` lead to different discrete
+Fourier transforms of :math:`A(r)`, because the assumption of periodicity of
+:math:`a(r) = A(r) r^{-q+(1/2)}` is different for different :math:`q`.
+
+If :math:`A(r)` is a power law, :math:`A(r)` proportional to
+:math:`r^{q-(1/2)}`, then applying a bias :math:`q` yields a discrete Fourier
+transform :math:`\tilde{A}(k)` that is exactly equal to the continuous Fourier
+transform, because then :math:`a(r)` is a constant, which is a periodic
+function.
+
 The Hankel transform
+````````````````````
 
-            infinity
-            /
-    Ã(k) = | A(r) J  (k r) k dr
-            /       mu
-            0
+.. math::
+    :label: ham12
+
+    \tilde{A}(k) = \int^\infty_0 A(r) J_{\mu} (k r) k dr
 
 may be done by making the substitutions
-                q                      -q
-    A(r) = a(r) r    and   Ã(k) = ã(k) k
 
-and Hankel transforming a(r) with a power law bias (k r)^q
+.. math::
+    :label: ham13
 
-            infinity
-            /           q
-    ã(k) = | a(r) (k r)  J  (k r) k dr
-            /              mu
-            0
+    A(r) = a(r) r^q \quad \text{and} \quad \tilde{A}(k) = \tilde{a}(k) k^{-q}
 
-Different choices of power law bias q lead to different discrete Hankel
-transforms of A(r), because the assumption of periodicity of a(r) = A(r) r^-q
-is different for different q.
+and Hankel transforming :math:`a(r)` with a power law bias :math:`(k r)^q`
 
-If A(r) is a power law, A(r) proportional to r^q, then applying a bias q yields
-a discrete Hankel transform Ã(k) that is exactly equal to the continuous Hankel
-transform, because then a(r) is a constant, which is a periodic function.
+.. math::
+    :label: ham14
 
-----------------------------------------------------------------------
-------------------------
+    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\mu} (k r) k dr
+
+Different choices of power law bias :math:`q` lead to different discrete Hankel
+transforms of :math:`A(r)`, because the assumption of periodicity of
+:math:`a(r) = A(r) r^{-q}` is different for different :math:`q`.
+
+If :math:`A(r)` is a power law, :math:`A(r)` proportional to :math:`r^q`, then
+applying a bias :math:`q` yields a discrete Hankel transform
+:math:`\tilde{A}(k)` that is exactly equal to the continuous Hankel transform,
+because then :math:`a(r)` is a constant, which is a periodic function.
+
 There are five routines:
-------------------------
+````````````````````````
 Comments in the subroutines contain further details.
 
-(1) subroutine fhti(n,mu,q,dlnr,kr,kropt,wsave,ok)
-    is an initialization routine.
+1. subroutine `fhti(n,mu,q,dlnr,kr,kropt,wsave,ok)`
+   is an initialization routine.
 
-(2) subroutine fftl(n,a,rk,dir,wsave)
-    computes the discrete Fourier sine or cosine transform of a logarithmically
-    spaced periodic sequence. This is a driver routine that calls fhtq.
+2. subroutine `fftl(n,a,rk,dir,wsave)`
+   computes the discrete Fourier sine or cosine transform of a logarithmically
+   spaced periodic sequence. This is a driver routine that calls fhtq.
 
-(3) subroutine fht(n,a,dir,wsave)
-    computes the discrete Hankel transform of a logarithmically spaced periodic
-    sequence.  This is a driver routine that calls fhtq.
+3. subroutine `fht(n,a,dir,wsave)`
+   computes the discrete Hankel transform of a logarithmically spaced periodic
+   sequence.  This is a driver routine that calls fhtq.
 
-(4) subroutine fhtq(n,a,dir,wsave)
-    computes the biased discrete Hankel transform of a logarithmically spaced
-    periodic sequence.  This is the basic FFTLog routine.
+4. subroutine `fhtq(n,a,dir,wsave)`
+   computes the biased discrete Hankel transform of a logarithmically spaced
+   periodic sequence.  This is the basic FFTLog routine.
 
-(5) real*8 function krgood(mu,q,dlnr,kr)
-    takes an input kr and returns the nearest low-ringing kr.  This is an
-    optional routine called by fhti.
+5. real*8 function `krgood(mu,q,dlnr,kr)`
+   takes an input kr and returns the nearest low-ringing kr.  This is an
+   optional routine called by fhti.
 
 """
 import numpy as np

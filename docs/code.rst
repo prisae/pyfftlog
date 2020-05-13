@@ -1,8 +1,5 @@
 Manual and API
 ##############
 
-.. automodule:: pyfftlog
-    :members:
-
-.. automodule:: pyfftlo.pyfftlog
+.. automodule:: pyfftlog.pyfftlog
     :members:
