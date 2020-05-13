@@ -1,4 +1,19 @@
-`pyfftlog` - python version of FFTLog
+.. image:: https://readthedocs.org/projects/pyfftlog/badge/?version=latest
+   :target: https://pyfftlog.readthedocs.io/en/latest
+   :alt: Documentation Status
+.. image:: https://travis-ci.org/prisae/pyfftlog.svg?branch=master
+   :target: https://travis-ci.org/prisae/pyfftlog
+   :alt: Travis-CI
+.. image:: https://coveralls.io/repos/github/prisae/pyfftlog/badge.svg?branch=master
+   :target: https://coveralls.io/github/prisae/pyfftlog?branch=master
+   :alt: Coveralls
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.??????.svg
+   :target: https://doi.org/10.5281/zenodo.??????
+   :alt: Zenodo DOI
+
+.. sphinx-inclusion-marker
+
+`#pyfftlog` - python version of FFTLog
 =====================================
 
 This is a python version of the logarithmic FFT code *FFTLog* as presented in
