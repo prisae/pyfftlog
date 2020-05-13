@@ -1,0 +1,18 @@
+# GLOBAL REQUIREMENTS
+-r requirements.txt
+
+# SETUP RELATED
+setuptools_scm
+
+# FOR DOCUMENTATION
+sphinx
+numpydoc
+matplotlib
+sphinx_gallery
+sphinx_rtd_theme
+
+# FOR TESTING
+pytest
+coveralls
+pytest_cov
+pytest_flake8

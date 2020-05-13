@@ -182,6 +182,8 @@ import numpy as np
 from scipy.special import loggamma
 from scipy.fftpack import rfft, irfft
 
+__all__ = ['fhti', 'fftl', 'fht', 'fhtq', 'krgood']
+
 
 def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
     """Initialize the working array xsave used by fftl, fht, and fhtq.
