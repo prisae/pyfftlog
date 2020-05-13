@@ -1,3 +1,4 @@
+from datetime import datetime
 from pyfftlog.pyfftlog import fhti, fftl, fht, fhtq, krgood
 
 __all__ = ['fhti', 'fftl', 'fht', 'fhtq', 'krgood']
