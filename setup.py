@@ -7,11 +7,9 @@ from setuptools import setup
 readme = open('README.rst').read()
 readme = re.sub('----.*marker', '----', readme, flags=re.DOTALL)
 
-description = 'Open-source full 3D electromagnetic modeller for 1D VTI media'
-
 setup(
     name='pyfftlog',
-    description=description,
+    description='Logarithmic Fast Fourier Transform',
     long_description=readme,
     author='Dieter Werthmüller',
     author_email='dieter@werthmuller.org',
