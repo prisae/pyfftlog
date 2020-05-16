@@ -4,14 +4,15 @@ language: python
 # which follows the `PYTHON=X.Y` var.
 matrix:
   include:
-  - python: 3.6
-    env: PYTHON=3.6
-  - python: 3.7
-    env: PYTHON=3.7 DEPLOY_PYPI=true
-  - python: 3.8
-    env: PYTHON=3.8
-  - python: 3.7  # => just linkcheck
-    env: PYTHON=3.7 CHCKLNKS=true PCKGS="matplotlib pillow" TEST="" INST="sphinx numpydoc sphinx_rtd_theme sphinx_numfig sphinx_gallery"
+    - python: 3.6
+      env: PYTHON=3.6
+    - python: 3.7
+      env: PYTHON=3.7 DEPLOY_PYPI=true
+    - python: 3.8
+      env: PYTHON=3.8
+    - python: 3.7  # => just linkcheck
+      env: PYTHON=3.7 CHCKLNKS=true PCKGS="matplotlib pillow" TEST="" INST="sphinx numpydoc sphinx_rtd_theme sphinx_numfig sphinx_gallery"
+
 jobs:
   allow_failures:  # env must be EXACTLY as env allowed to fail.
     - env: PYTHON=3.7 CHCKLNKS=true PCKGS="matplotlib pillow" TEST="" INST="sphinx numpydoc sphinx_rtd_theme sphinx_numfig sphinx_gallery"
