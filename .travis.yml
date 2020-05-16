@@ -34,7 +34,7 @@ script:
   - pytest --cov=pyfftlog --flake8 $TEST
 
 after_success:
-  - if [ "$CHCKLNKS" == "" ]; then coveralls; fi
+  - coveralls
 
 deploy:
   provider: pypi
