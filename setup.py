@@ -5,7 +5,7 @@ from setuptools import setup
 
 # Get README and remove badges.
 readme = open('README.rst').read()
-readme = re.sub('----.*marker', '----', readme, flags=re.DOTALL)
+readme = re.sub('.*`pyfftlog` - A', '`pyfftlog` - A', readme, flags=re.DOTALL)
 
 setup(
     name='pyfftlog',
