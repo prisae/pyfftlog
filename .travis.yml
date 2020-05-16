@@ -15,7 +15,8 @@ matrix:
 
 jobs:
   allow_failures:  # env must be EXACTLY as env allowed to fail.
-    - env: PYTHON=3.7 CHCKLNKS=true PCKGS="matplotlib pillow" TEST="" INST="sphinx numpydoc sphinx_rtd_theme sphinx_numfig sphinx_gallery"
+    - python: 3.7
+      env: PYTHON=3.7 CHCKLNKS=true PCKGS="matplotlib pillow" TEST="" INST="sphinx numpydoc sphinx_rtd_theme sphinx_numfig sphinx_gallery"
 
 install:
   - sudo apt-get update
