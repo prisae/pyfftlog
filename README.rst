@@ -7,18 +7,21 @@
 .. image:: https://coveralls.io/repos/github/prisae/pyfftlog/badge.svg?branch=master
    :target: https://coveralls.io/github/prisae/pyfftlog?branch=master
    :alt: Coveralls
-.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.??????.svg
-   :target: https://doi.org/10.5281/zenodo.??????
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3830364.svg
+   :target: https://doi.org/10.5281/zenodo.3830364
    :alt: Zenodo DOI
+
 
 .. sphinx-inclusion-marker
 
-A python version of FFTLog
-==========================
+
+`pyfftlog` - A python version of FFTLog
+=======================================
 
 This is a python version of the logarithmic FFT code *FFTLog* as presented in
-Appendix B of Hamilton (2000) and published at `casa.colorado.edu/~ajsh/FFTLog
-<http://casa.colorado.edu/~ajsh/FFTLog>`_.
+Appendix B of `Hamilton (2000)
+<http://dx.doi.org/10.1046/j.1365-8711.2000.03071.x>`_ and published at
+`casa.colorado.edu/~ajsh/FFTLog <http://casa.colorado.edu/~ajsh/FFTLog>`_.
 
 A simple `f2py`-wrapper (`fftlog`) can be found on `github.com/prisae/fftlog
 <https://github.com/prisae/fftlog>`_.  Tests have shown that `fftlog` is a bit
@@ -26,12 +29,16 @@ faster than `pyfftlog`, but `pyfftlog` is easier to implement, as you only need
 `NumPy` and `SciPy`, without the need to compile anything.
 
 I hope that `FFTLog` will make it into `SciPy` in the future, which will make
-this project redundant.
+this project redundant. (If you have the bandwidth and are willing to chip in
+have a look at `SciPy PR #7310 <https://github.com/scipy/scipy/pull/7310>`_.)
 
 Be aware that `pyfftlog` has not been tested extensively. It works fine for the
 test from the original code, and my use case, which is `pyfftlog.fftl` with
 `mu=0.5` (sine-transform), `q=0` (unbiased), `k=1`, `kropt=1`, and `tdir=1`
 (forward). Please let me know if you encounter any issues.
+
+- **Documentation**: https://pyfftlog.readthedocs.io
+- **Source Code**: https://github.com/prisae/pyfftlog
 
 
 Description of FFTLog from the FFTLog-Website
@@ -52,29 +59,40 @@ steps) and aliasing (periodic folding of frequencies), but under appropriate
 circumstances FFTLog may approximate the results of a continuous Fourier or
 Hankel transform.
 
-The FFTLog algorithm was originally proposed by Talman (1978).
+The FFTLog algorithm was originally proposed by `Talman (1978)
+<http://dx.doi.org/10.1016/0021-9991(78)90107-9>`_.
 
 *For the full documentation, see* `casa.colorado.edu/~ajsh/FFTLog
 <http://casa.colorado.edu/~ajsh/FFTLog>`_.
 
 
-References
-----------
+Installation
+------------
 
-    Hamilton, A. J. S., 2000, Uncorrelated modes of the non-linear power
-    spectrum: Monthly Notices of the Royal Astronomical Society, 312, pages
-    257-284; DOI: `10.1046/j.1365-8711.2000.03071.x
-    <http://dx.doi.org/10.1046/j.1365-8711.2000.03071.x>`_.
+You can install pyfftlog either via **conda**:
 
-    Talman, J. D., 1978, Numerical Fourier and Bessel transforms in logarithmic
-    variables: Journal of Computational Physics, 29, pages 35-48; DOI:
-    `10.1016/0021-9991(78)90107-9
-    <http://dx.doi.org/10.1016/0021-9991(78)90107-9>`_.
+.. code-block:: console
+
+   conda install -c conda-forge pyfftlog
+
+or via **pip**:
+
+.. code-block:: console
+
+   pip install pyfftlog
 
 
-License and Credits
--------------------
+License, Citation, and Credits
+------------------------------
 
 Released to the public domain under the `CC0 1.0 License
-<http://creativecommons.org/publicdomain/zero/1.0>`_. Be kind and give credits
-by citing Hamilton (2000).
+<http://creativecommons.org/publicdomain/zero/1.0>`_.
+
+All releases have a Zenodo-DOI, which can be found on `10.5281/zenodo.3830364
+<https://doi.org/10.5281/zenodo.3830364>`_.
+
+Be kind and give credits by citing `Hamilton (2000)
+<http://dx.doi.org/10.1046/j.1365-8711.2000.03071.x>`_. See the
+`references-section
+<https://pyfftlog.readthedocs.io/en/stable/references.html>`_ in the manual for
+full references.
