@@ -1,22 +1,21 @@
 r"""
 
-:mod:`pyfftlog.pyfftlog` -- Python version of FFTLog
-====================================================
+`pyfftlog` -- Python version of FFTLog
+======================================
 
 This is a Python version of the FFTLog Fortran code by Andrew Hamilton,
 [Hami00]_.
 
-The function :func:`scipy.special.loggamma` replaces the file `cdgamma.f` in
+The function :obj:`scipy.special.loggamma` replaces the file `cdgamma.f` in
 the original code, and the functions :func:`scipy.fftpack.rfft` and
 :func:`scipy.fftpack.irfft` replace the files `drffti.f`, `drfftf.f`, and
 `drfftb.f` in the original code.
 
 The original documentation has just been adjusted where necessary, and put into
-a more pythonic format (e.g. using 'Parameters' and 'Returns' in the
+a more pythonic format (e.g. using `Parameters` and `Returns` in the
 documentation').
 
-Below the original documentation from `casa.colorado.edu/~ajsh/FFTLog
-<http://casa.colorado.edu/~ajsh/FFTLog>`_.
+**What follows is the original documentation from the file `fftlog.f`:**
 
 THE FFTLog CODE
 ---------------
@@ -24,13 +23,10 @@ THE FFTLog CODE
 FFTLog computes the discrete Fast Fourier Transform or Fast Hankel Transform
 (of arbitrary real index) of a periodic logarithmic sequence.
 
-Version of 5 July 1999.
-
-For more information about FFTLog, see http://casa.colorado.edu/~ajsh/FFTLog.
-
-Andrew J S Hamilton March 1999, email: Andrew.Hamilton@Colorado.EDU
-
-Refs: [Talm78]_
+- Version of 13 Mar 2000.
+- For more information about FFTLog, see http://casa.colorado.edu/~ajsh/FFTLog.
+- Andrew J S Hamilton March 1999.
+- Refs: [Talm78]_.
 
 FFTLog computes a discrete version of the Hankel Transform (= Fourier-Bessel
 Transform) with a power law bias :math:`(k r)^q`
@@ -38,12 +34,12 @@ Transform) with a power law bias :math:`(k r)^q`
 .. math::
     :label: ham1
 
-    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\mu} (k r) k dr
+    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\mu} (k r) k \,dr \, ,
 
 .. math::
     :label: ham2
 
-    a(r) = \int^\infty_0 \tilde{a}(k) (k r)^{-q} J_{\mu} (k r) k dr
+    a(r) = \int^\infty_0 \tilde{a}(k) (k r)^{-q} J_{\mu} (k r) r \,dk \, ,
 
 where :math:`J_{\mu}` is the Bessel function of order :math:`\mu`. The index
 :math:`\mu` may be any real number, positive or negative.
@@ -54,7 +50,7 @@ uniformly logarithmically spaced with spacing :math:`dlnr`
 .. math::
     :label: ham3
 
-    a_j = a(r_j) \quad \text{at}   r_j = r_c \exp[(j-j_c) dlnr]
+    a_j = a(r_j) \quad \text{at} \quad r_j = r_c \exp[(j-j_c) dlnr]
 
 centred about the point :math:`r_c`. The central index :math:`j_c = (n+1)/2` is
 1/2 integral if :math:`n` is even. Similarly, the output array
@@ -75,7 +71,7 @@ chosen arbitrarily; but it would be normal to choose the product
 .. math::
     :label: ham5
 
-    kr = k_c r_c = k_j r_(n+1-j) = k_(n+1-j) r_j
+    kr = k_c r_c = k_j r_{(n+1-j)} = k_{(n+1-j)} r_j
 
 to be about 1 (or 2, or pi, to taste).
 
@@ -96,12 +92,12 @@ The Fourier sine and cosine transforms
 .. math::
     :label: ham6
 
-    \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \sin(k r) dr
+    \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \sin(k r) \,dr \, ,
 
 .. math::
     :label: ham7
 
-    \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \cos(k r) dr
+    \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \cos(k r) \,dr \, ,
 
 may be regarded as special cases of the Hankel transform with :math:`\mu = 1/2`
 and :math:`-1/2` since
@@ -109,12 +105,12 @@ and :math:`-1/2` since
 .. math::
     :label: ham8
 
-    \sqrt{2/\pi} \sin(x) = \sqrt(x) J_{1/2} (x)
+    \sqrt{2/\pi} \sin(x) = \sqrt(x) J_{1/2} (x) \, ,
 
 .. math::
     :label: ham9
 
-    \sqrt{2/\pi} \cos(x) = \sqrt(x) J_{-1/2} (x)
+    \sqrt{2/\pi} \cos(x) = \sqrt(x) J_{-1/2} (x) \, .
 
 
 The Fourier transforms may be done by making the substitutions
@@ -130,7 +126,7 @@ and Hankel transforming :math:`a(r)` with a power law bias :math:`(k r)^q`
 .. math::
     :label: ham11
 
-    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\pm 1/2} (k r) k dr
+    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\pm 1/2} (k r) k \,dr \, .
 
 Different choices of power law bias :math:`q` lead to different discrete
 Fourier transforms of :math:`A(r)`, because the assumption of periodicity of
@@ -148,7 +144,7 @@ The Hankel transform
 .. math::
     :label: ham12
 
-    \tilde{A}(k) = \int^\infty_0 A(r) J_{\mu} (k r) k dr
+    \tilde{A}(k) = \int^\infty_0 A(r) J_{\mu} (k r) k \,dr
 
 may be done by making the substitutions
 
@@ -162,7 +158,7 @@ and Hankel transforming :math:`a(r)` with a power law bias :math:`(k r)^q`
 .. math::
     :label: ham14
 
-    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\mu} (k r) k dr
+    \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\mu} (k r) k \,dr \, .
 
 Different choices of power law bias :math:`q` lead to different discrete Hankel
 transforms of :math:`A(r)`, because the assumption of periodicity of
@@ -177,24 +173,26 @@ There are five routines:
 ````````````````````````
 Comments in the subroutines contain further details.
 
-1. subroutine `fhti(n,mu,q,dlnr,kr,kropt,wsave,ok)`
+1. **subroutine `fhti(n,mu,q,dlnr,kr,kropt,wsave,ok)`**
    is an initialization routine.
 
-2. subroutine `fftl(n,a,rk,dir,wsave)`
+2. **subroutine `fftl(n,a,rk,dir,wsave)`**
    computes the discrete Fourier sine or cosine transform of a logarithmically
-   spaced periodic sequence. This is a driver routine that calls fhtq.
+   spaced periodic sequence. This is a driver routine that calls `fhtq`.
 
-3. subroutine `fht(n,a,dir,wsave)`
+3. **subroutine `fht(n,a,dir,wsave)`**
    computes the discrete Hankel transform of a logarithmically spaced periodic
-   sequence.  This is a driver routine that calls fhtq.
+   sequence. This is a driver routine that calls `fhtq`.
 
-4. subroutine `fhtq(n,a,dir,wsave)`
+4. **subroutine `fhtq(n,a,dir,wsave)`**
    computes the biased discrete Hankel transform of a logarithmically spaced
-   periodic sequence.  This is the basic FFTLog routine.
+   periodic sequence. **This is the basic FFTLog routine.**
 
-5. real*8 function `krgood(mu,q,dlnr,kr)`
-   takes an input kr and returns the nearest low-ringing kr.  This is an
-   optional routine called by fhti.
+5. **real*8 function `krgood(mu,q,dlnr,kr)`**
+   takes an input `kr` and returns the nearest low-ringing `kr`. This is an
+   optional routine called by `fhti`.
+
+**END of the original documentation from the file `fftlog.f`**
 
 """
 import numpy as np
@@ -205,9 +203,9 @@ __all__ = ['fhti', 'fftl', 'fht', 'fhtq', 'krgood']
 
 
 def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
-    """Initialize the working array xsave used by fftl, fht, and fhtq.
+    r"""Initialize the working array xsave used by fftl, fht, and fhtq.
 
-    fhti initializes the working array xsave used by fftl, fht, and fhtq.  fhti
+    fhti initializes the working array xsave used by fftl, fht, and fhtq. fhti
     need be called once, whereafter fftl, fht, or fhtq may be called many
     times, as long as n, mu, q, dlnr, and kr remain unchanged. fhti should be
     called each time n, mu, q, dlnr, or kr is changed. The work array xsave
@@ -230,9 +228,9 @@ def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
 
     q : float, optional
         Exponent of power law bias; q may be any real number, positive or
-        negative.  If in doubt, use q = 0, for which case the Hankel transform
+        negative. If in doubt, use q = 0, for which case the Hankel transform
         is orthogonal, i.e. self-inverse, provided also that, for n even, kr is
-        low-ringing.  Non-zero q may yield better approximations to the
+        low-ringing. Non-zero q may yield better approximations to the
         continuous Hankel transform for some functions.
         Defaults to 0 (unbiased).
 
@@ -408,41 +406,40 @@ def fhti(n, mu, dlnr, q=0, kr=1, kropt=0):
 
 
 def fftl(a, xsave, rk=1, tdir=1):
-    """Logarithmic fast Fourier transform FFTLog.
+    r"""Logarithmic fast Fourier transform FFTLog.
 
-    This is a driver routine that calls fhtq.
+    This is a driver routine that calls :func:`fhtq`.
 
-    fftl computes a discrete version of the Fourier sine (if mu = 1/2) or
+    `fftl` computes a discrete version of the Fourier sine (if mu = 1/2) or
     cosine (if mu = -1/2) transform
 
-                        infinity
-                         /
-       Ã(k) = sqrt(2/pi) | A(r) sin(k r) dr
-                         /
-                        0
+    .. math::
 
-                        infinity
-                         /
-       Ã(k) = sqrt(2/pi) | A(r) cos(k r) dr
-                         /
-                        0
+        \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \sin(k r) \,dr \, ,
+
+    .. math::
+
+        \tilde{A}(k) = \sqrt{2/\pi} \int^\infty_0 A(r) \cos(k r) \,dr \, ,
 
     by making the substitutions
-                    q-(1/2)                      -q-(1/2)
-       A(r) = a(r) r          and   Ã(k) = ã(k) k
 
-    and applying a biased Hankel transform to a(r).
+    .. math::
+
+        A(r) = a(r) r^{q-1/2} \quad \text{and} \quad
+        \tilde{A}(k) = \tilde{a}(k) k^{-q-1/2}
+
+    and applying a biased Hankel transform to :math:`a(r)`.
 
     The steps are:
-    1. a(r) = A(r) r^[-dir*(q-.5)]
-    2. call fhtq to transform a(r) -> ã(k)
-    3. Ã(k) = ã(k) k^[-dir*(q+.5)]
+    1. :math:`a(r) = A(r) r^[-dir (q-0.5)]`
+    2. call `fhtq` to transform :math:`a(r) \rightarrow \tilde{a}(k)`
+    3. :math:`\tilde{A}(k) = \tilde{a}(k) k^[-dir (q+0.5)]`
 
-    fhti must be called before the first call to fftl, with mu = 1/2 for a sine
-    transform, or mu = -1/2 for a cosine transform.
+    `fhti` must be called before the first call to `fftl`, with `mu=1/2` for a
+    sine transform, or `mu=-1/2` for a cosine transform.
 
-    A call to fftl with dir=1 followed by a call to fftl with dir=-1 (and rk
-    unchanged), or vice versa, leaves the array a unchanged.
+    A call to `fftl` with `dir=1` followed by a call to `fftl` with `dir=-1`
+    (and rk unchanged), or vice versa, leaves the array a unchanged.
 
     Parameters
     ----------
@@ -463,6 +460,7 @@ def fftl(a, xsave, rk=1, tdir=1):
     tdir : int, optional; {1, -1}
         -  1 for forward transform (default),
         - -1 for backward transform.
+
         A backward transform (dir = -1) is the same as a forward transform with
         q -> -q and rk -> 1/rk, for any kr if n is odd, for low-ringing kr if n
         is even.
@@ -498,34 +496,34 @@ def fftl(a, xsave, rk=1, tdir=1):
 
 
 def fht(a, xsave, tdir=1):
-    """Fast Hankel transform FHT.
+    r"""Fast Hankel transform FHT.
 
-    This is a driver routine that calls fhtq.
+    This is a driver routine that calls :func:`fhtq`.
 
-    fht computes a discrete version of the Hankel transform
+    `fht` computes a discrete version of the Hankel transform
 
-             infinity
-              /
-       Ã(k) = | A(r) J  (k r) k dr
-              /       mu
-             0
+    .. math::
+
+        \tilde{A}(k) = \int^\infty_0 A(r) J_{\mu} (k r) k \,dr \,
 
     by making the substitutions
-                    q                      -q
-       A(r) = a(r) r    and   Ã(k) = ã(k) k
 
-    and applying a biased Hankel transform to a(r).
+    .. math::
+
+        A(r) = a(r) r^q \quad \text{and} \quad
+        \tilde{A}(k) = \tilde{a}(k) k^{-q}
+
+    and applying a biased Hankel transform to :math:`a(r)`.
 
     The steps are:
-    1. a(r) = A(r) r^(-dir*q)
-    2. call fhtq to transform a(r) -> ã(k)
-    3. Ã(k) = ã(k) k^(-dir*q)
+    1. :math:`a(r) = A(r) r^{-dir q}`
+    2. call `fhtq` to transform :math:`a(r) \rightarrow \tilde{a}(k)`
+    3. :math:`\tilde{A}(k) = \tilde{a}(k) k^{-dir q}`
 
-    fhti must be called before the first call to fht.
+    `fhti` must be called before the first call to `fht`.
 
-    A call to fht with dir=1 followed by a call to fht with dir=-1, or vice
-    versa, leaves the array a unchanged.
-
+    A call to `fht` with `dir=1` followed by a call to `fht` with `dir=-1`, or
+    vice versa, leaves the array a unchanged.
 
 
     Parameters
@@ -540,6 +538,7 @@ def fht(a, xsave, tdir=1):
     tdir : int, optional; {1, -1}
         -  1 for forward transform (default),
         - -1 for backward transform.
+
         A backward transform (dir = -1) is the same as a forward transform with
         q -> -q, for any kr if n is odd, for low-ringing kr if n is even.
 
@@ -574,22 +573,20 @@ def fht(a, xsave, tdir=1):
 
 
 def fhtq(a, xsave, tdir=1):
-    """Kernel routine of FFTLog.
+    r"""Kernel routine of FFTLog.
 
     This is the basic FFTLog routine.
 
-    fhtq computes a discrete version of the biased Hankel transform
+    `fhtq` computes a discrete version of the biased Hankel transform
 
-             infinity
-              /           q
-       ã(k) = | a(r) (k r)  J  (k r) k dr
-              /              mu
-             0
+    .. math::
 
-    fhti must be called before the first call to fhtq.
+        \tilde{a}(k) = \int^\infty_0 a(r) (k r)^q J_{\mu} (k r) k \,dr \, .
 
-    A call to fhtq with dir=1 followed by a call to fhtq with dir=-1, or vice
-    versa, leaves the array a unchanged.
+    `fhti` must be called before the first call to `fhtq`.
+
+    A call to `fhtq` with `dir=1` followed by a call to `fhtq` with `dir=-1`,
+    or vice versa, leaves the array a unchanged.
 
     Parameters
     ----------
@@ -603,6 +600,7 @@ def fhtq(a, xsave, tdir=1):
     tdir : int, optional; {1, -1}
         -  1 for forward transform (default),
         - -1 for backward transform.
+
         A backward transform (dir = -1) is the same as a forward transform with
         q -> -q, for any kr if n is odd, for low-ringing kr if n is even.
 
@@ -694,12 +692,16 @@ def fhtq(a, xsave, tdir=1):
 
 
 def krgood(mu, q, dlnr, kr):
-    """Return optimal kr
+    r"""Return optimal kr.
 
     Use of this routine is optional.
 
     Choosing kr so that
-        (kr)^(- i pi/dlnr) U_mu(q + i pi/dlnr)
+
+    .. math::
+
+        (k r)^{- i pi/dlnr} U_{\mu}(q + i pi/dlnr)
+
     is real may reduce ringing of the discrete Hankel transform, because it
     makes the transition of this function across the period boundary smoother.
 
@@ -711,9 +713,9 @@ def krgood(mu, q, dlnr, kr):
 
     q : float
         exponent of power law bias; q may be any real number, positive or
-        negative.  If in doubt, use q = 0, for which case the Hankel transform
+        negative. If in doubt, use q = 0, for which case the Hankel transform
         is orthogonal, i.e. self-inverse, provided also that, for n even, kr is
-        low-ringing.  Non-zero q may yield better approximations to the
+        low-ringing. Non-zero q may yield better approximations to the
         continuous Hankel transform for some functions.
 
     dlnr : float
@@ -729,7 +731,7 @@ def krgood(mu, q, dlnr, kr):
     Returns
     -------
     krgood : float
-        low-ringing value of kr nearest to input kr.  ln(krgood) is always
+        low-ringing value of kr nearest to input kr. ln(krgood) is always
         within dlnr/2 of ln(kr).
 
     """
