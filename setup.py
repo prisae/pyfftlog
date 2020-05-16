@@ -15,7 +15,7 @@ setup(
     author_email='dieter@werthmuller.org',
     url='https://github.com/prisae/pyfftlog',
     license='CC0-1.0',
-    packages=['pyfftlog',],
+    packages=['pyfftlog', ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',

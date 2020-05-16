@@ -1,7 +1,7 @@
 import time
 import warnings
 from pyfftlog import __version__
-# from sphinx_gallery.sorting import FileNameSortKey
+from sphinx_gallery.sorting import FileNameSortKey
 
 # ==== 1. Extensions  ====
 
@@ -13,7 +13,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.intersphinx',
     'numpydoc',
-    # 'sphinx_gallery.gen_gallery',
+    'sphinx_gallery.gen_gallery',
 ]
 
 # Numpydoc settings
@@ -24,30 +24,28 @@ numpydoc_show_class_members = False
 # Todo settings
 todo_include_todos = True
 
-# # Sphinx gallery configuration
-# sphinx_gallery_conf = {
-#     'examples_dirs': '../examples',
-#     'gallery_dirs': 'examples',
-#     'capture_repr': ('_repr_html_', '__repr__'),
-#     # Patter to search for example files
-#     "filename_pattern": r"\.py",
-#     # Sort gallery example by file name instead of number of lines (default)
-#     "within_subsection_order": FileNameSortKey,
-#     # Remove the settings (e.g., sphinx_gallery_thumbnail_number)
-#     'remove_config_comments': True,
-#     # Show memory
-#     'show_memory': True,
-#     # Custom first notebook cell
-#     'first_notebook_cell': '%matplotlib notebook',
-# }
-#
-# # https://github.com/sphinx-gallery/sphinx-gallery/pull/521/files
-# # Remove matplotlib agg warnings from generated doc when using plt.show
-# warnings.filterwarnings("ignore", category=UserWarning,
-#                         message='Matplotlib is currently using agg, which is
-#                         a'
-#                                 ' non-GUI backend, so cannot show the
-#                                 figure.')
+# Sphinx gallery configuration
+sphinx_gallery_conf = {
+    'examples_dirs': '../examples',
+    'gallery_dirs': 'examples',
+    'capture_repr': ('_repr_html_', '__repr__'),
+    # Patter to search for example files
+    "filename_pattern": r"\.py",
+    # Sort gallery example by file name instead of number of lines (default)
+    "within_subsection_order": FileNameSortKey,
+    # Remove the settings (e.g., sphinx_gallery_thumbnail_number)
+    'remove_config_comments': True,
+    # Show memory
+    'show_memory': True,
+    # Custom first notebook cell
+    'first_notebook_cell': '%matplotlib notebook',
+}
+
+# https://github.com/sphinx-gallery/sphinx-gallery/pull/521/files
+# Remove matplotlib agg warnings from generated doc when using plt.show
+warnings.filterwarnings("ignore", category=UserWarning,
+                        message='Matplotlib is currently using agg, which is a'
+                                ' non-GUI backend, so cannot show the figure.')
 
 # Intersphinx configuration
 intersphinx_mapping = {
