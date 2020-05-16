@@ -1,0 +1,21 @@
+# Directories
+__pycache__/
+
+# Sphinx
+docs/_build/
+docs/examples/
+
+# Pytest and coverage related
+htmlcov
+.coverage
+.coverage.*
+.pytest_cache/
+
+# setuptools_scm
+pyfftlog/version.py
+
+# Build related
+.eggs/
+build/
+dist/
+pyfftlog.egg-info/
