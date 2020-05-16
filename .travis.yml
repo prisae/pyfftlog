@@ -1,0 +1,44 @@
+language: python
+matrix:
+  include:
+  - python: 3.6
+    env: PYTHON=3.6
+  - python: 3.7
+    env: PYTHON=3.7 DEPLOY_PYPI=true
+  - python: 3.8
+    env: PYTHON=3.8
+  - python: 3.7
+    env: PYTHON=3.7 CHCKLNKS=true PCKGS="matplotlib pillow" TEST="" INST="sphinx numpydoc
+      sphinx_rtd_theme sphinx_numfig sphinx_gallery"
+jobs:
+  allow_failures:
+  - env: PYTHON=3.7 CHCKLNKS=true PCKGS="matplotlib pillow" TEST="" INST="sphinx numpydoc
+      sphinx_rtd_theme sphinx_numfig sphinx_gallery"
+install:
+- sudo apt-get update
+- wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+- bash miniconda.sh -b -p $HOME/miniconda
+- export PATH="$HOME/miniconda/bin:$PATH"
+- hash -r
+- conda config --set always_yes yes --set changeps1 no
+- conda update --all
+- conda info -a
+- conda create -q -n test-environment python=$PYTHON $PCKGS scipy pytest pytest-cov
+- source activate test-environment
+- pip install setuptools_scm coveralls pytest-flake8 $INST
+- if [ "$CHCKLNKS" = true ]; then pip install .; else python setup.py install; fi
+script:
+- if [ "$CHCKLNKS" = true ]; then cd docs; make html -b linkcheck; else pytest --cov=pyfftlog
+  --flake8 $TEST; fi
+after_success:
+- if [ "$CHCKLNKS" == "" ]; then coveralls; fi
+deploy:
+  provider: pypi
+  user: __token__
+  password:
+  secure: HQvbd1KJu6jPhQZeTAbW5Gv0TDOm7QLFMusYUahOsfAdnsHTZyKs5PD2AXeREBAOJAjPpF68kO/tBKKWtqkSzQR23+gEFIkeU7pezBAx2LBCXzZRygJCeu7Vr2hwAqlQTqiunvY1ddYiLZg5Wo9LtpEIp2aZyr5aYUkyGsyxb148G5XPOPOH7lfpI/2P4i546zOVoEGh1IBaemkeo3tUGqAnscb4uTikuit/bnZPqKrw8szfwN6QIkX6hsXl1t8Bu105kc9pLkHHlO2gRYDC/CsRdEfALvIa4oJslCcV8hdzIzoYTnQjSHC2Z9+dje101xNd+TUEBvSZY5bi9ov060qm3dFPdy4pRjVjg+iX5x7lwE9BbWxNzJVOTpHG9MDDhjRoXjSL2otQ3huMDdnlgsnjfueMH5NZmR0dVneRkFrLbiLp7kuYCIpSMJ69CAM32Z/NKjvWRIum4hiRbv7Ut8mzARKKlkD2kfMznYM9dEmS7B/oYsqbHwZZI9G6k3v9chAAyXhky9XZDC0V0orjZUqFa44cy2ASvO+EmSUfL0p2OuT5hC5mIrDNZ6orTWGzFjUYKRbgGs6cwE5ondgI1rr7Rt3zbwulTdq32j/Mz7lCTNI8Uo63c2Z0rsCWMN28E/JsLD+nlabgPFLigvTNpIa7GEeb3Yr/h5KydGrwr+M=
+  on:
+    branch: master
+    tags: true
+    condition: $DEPLOY_PYPI = "true"
+  distributions: sdist bdist_wheel
