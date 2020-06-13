@@ -4,8 +4,9 @@
 # SETUP RELATED
 setuptools_scm
 
-# FOR DOCUMENTATION
+# FOR DOCUMENTATION/EXAMPLES
 sphinx
+empymod
 numpydoc
 matplotlib
 sphinx_gallery
