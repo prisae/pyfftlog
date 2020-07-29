@@ -1,7 +1,7 @@
 import time
 import warnings
 from pyfftlog import __version__
-from sphinx_gallery.sorting import FileNameSortKey
+from sphinx_gallery.sorting import ExplicitOrder, FileNameSortKey
 
 # ==== 1. Extensions  ====
 
@@ -28,6 +28,9 @@ todo_include_todos = True
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',
     'gallery_dirs': 'examples',
+    'subsection_order': ExplicitOrder([
+        '../examples/contrib',
+        ]),
     'capture_repr': ('_repr_html_', '__repr__'),
     # Patter to search for example files
     "filename_pattern": r"\.py",

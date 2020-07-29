@@ -115,7 +115,7 @@ tdir = 1
 
 
 ###############################################################################
-# Calculation related to the logarithmic spacing
+# Computation related to the logarithmic spacing
 # ----------------------------------------------
 
 # Central point log10(r_c) of periodic interval
@@ -132,8 +132,8 @@ dlnr = dlogr*np.log(10.0)
 
 
 ###############################################################################
-# Calculate input function: :math:`r^{\mu+1}\exp\left(-\frac{r^2}{2}\right)`
-# --------------------------------------------------------------------------
+# Compute input function: :math:`r^{\mu+1}\exp\left(-\frac{r^2}{2}\right)`
+# ------------------------------------------------------------------------
 
 r = 10**(logrc + (np.arange(1, n+1) - nc)*dlogr)
 ar = r**(mu + 1)*np.exp(-r**2/2.0)
@@ -161,8 +161,8 @@ rk = 10**(logrc - logkc)
 ak = pyfftlog.fht(ar.copy(), xsave, tdir)
 
 ###############################################################################
-# Calculate Output function: :math:`k^{\mu+1}\exp\left(-\frac{k^2}{2}\right)`
-# ---------------------------------------------------------------------------
+# Compute Output function: :math:`k^{\mu+1}\exp\left(-\frac{k^2}{2}\right)`
+# -------------------------------------------------------------------------
 
 k = 10**(logkc + (np.arange(1, n+1) - nc)*dlogr)
 theo = k**(mu + 1)*np.exp(-k**2/2.0)

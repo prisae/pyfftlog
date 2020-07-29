@@ -1,20 +1,25 @@
 r"""
 Sine Transform
-===========
+==============
 
-This is a simple test program to illustrate how the sine (or cosine as it
-works basically the same way ) fourier transform works using `FFTLog`. The test
-provides as input as sine function and performs the sine fourier transform.
-The input function is then recovered by performing an inverse fourier
-transform. The inverse is performed using the following integral.
+Contributed by `@ShazAlvi <https://github.com/ShazAlvi>`_.
+
+This is a simple test program to illustrate how the sine (or cosine as it works
+basically the same way ) Fourier transform works using `FFTLog`. The test
+provides as input as sine function and performs the sine Fourier transform. The
+input function is then recovered by performing an inverse Fourier transform.
+The inverse is performed using the following integral,
+
 .. math::
-    :label: hamtest1
-    F(t) = \sqrt{\frac{\pi}{2}}\int^\infty_0 A(f) \sin(ft) \,df \,
+    :label: sinetest
+
+    F(t) = \sqrt{\frac{\pi}{2}}\int^\infty_0 A(f)\ \sin(ft) \ \text{d}f \ .
+
 """
 import pyfftlog
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.integrate
+import matplotlib.pyplot as plt
 
 ###############################################################################
 # Define the parameters you wish to use
@@ -57,7 +62,7 @@ ftopt = 1
 tdir = 1
 
 ###############################################################################
-# Calculation related to the logarithmic spacing
+# Computation related to the logarithmic spacing
 # ----------------------------------------------
 
 # Central point log10(r_c) of periodic interval
@@ -75,21 +80,21 @@ dlnr = dlogt*np.log(10.0)
 
 
 ###############################################################################
-# Calculate input function: :math:`sin(t)`
-# --------------------------------------------------------------------------
+# Compute input function: :math:`\sin(t)`
+# ---------------------------------------
 
 t = 10**(logtc + (np.arange(1, n+1) - nc)*dlogt)
 a_t = np.sin(t)
 
 ###############################################################################
-# Initialize FFTLog transform - note fhti resets `ft`
-# ---------------------------------------------------
+# Initialize FFTLog transform - note `fhti` resets `ft`
+# -----------------------------------------------------
 
 ft, xsave = pyfftlog.fhti(n, mu, dlnr, q, ft, ftopt)
 
 ###############################################################################
-# Call pyfftlog.fhtl
-# ----------------------------------------
+# Call `pyfftlog.fhtl`
+# --------------------
 
 logfc = np.log10(ft) - logtc
 
@@ -98,7 +103,6 @@ a_f = pyfftlog.fftl(a_t.copy(), xsave, np.sqrt(2/np.pi), tdir)
 # Notice that np.sqrt(2/np.pi) is the normalization factor for the transform
 # Reconstruct the input function by taking the inverse fourier transform as
 # given in the description
-# ---------------------------------------------------------------------------
 f = 10**(logfc + (np.arange(1, n+1) - nc)*dlogt)
 # Array to store the reconstructed function for each value of t
 Recon_Fun = np.zeros((len(t)))
@@ -109,17 +113,20 @@ for i in range(len(t)):
 # Plotting the input function and the reconstructed input function and also
 # the distribution of the a(k) vs k.
 plt.figure()
+
 ax1 = plt.subplot(121)
-plt.title(r'Plott $a_f(f)$')
+plt.title(r'Frequency domain')
 plt.xlabel('f')
 plt.ylabel(r'$a_f(f)$')
 plt.semilogx(f, a_f, 'k')
 
 ax2 = plt.subplot(122)
-plt.title('Comparing input and reconstructed function')
+plt.title('Time domain')
 plt.xlabel("t")
 plt.ylabel("sin(t)")
-plt.semilogx(t, -Recon_Fun, '--', label='Reconstructed function')
-plt.semilogx(t, a_t, label='sin(t) funtion')
+plt.semilogx(t, a_t, lw=2, label=r'$\sin(t)$')
+plt.semilogx(t, -Recon_Fun, '--', label='Reconstructed')
 plt.legend()
+
+plt.tight_layout()
 plt.show()

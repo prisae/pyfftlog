@@ -80,7 +80,7 @@ pts_per_dec = 5    # Increase if not precise enough
 add_dec = [-2, 2]  # e.g. [-2, 2] to add 2 decades on each side
 q = 0              # -1 - +1; can improve results
 
-# Calculate minimum and maximum required inputs
+# Compute minimum and maximum required inputs
 rmin = np.log10(1/ftpts.max()) + add_dec[0]
 rmax = np.log10(1/ftpts.min()) + add_dec[1]
 n = np.int(rmax - rmin)*pts_per_dec
@@ -101,20 +101,20 @@ for mu in [0.5, -0.5]:
     dlogr = (rmax - rmin)/n
     dlnr = dlogr*np.log(10.)
 
-    # Calculate required input x-values
+    # Compute required input x-values
     pts_req = 10**(logrc + (np.arange(1, n+1) - nc)*dlogr)/2/np.pi
 
     # Initialize FFTLog
     kr, xsave = pyfftlog.fhti(n, mu, dlnr, q, kr=1, kropt=1)
 
-    # Calculate pts_out with adjusted kr
+    # Compute pts_out with adjusted kr
     logkc = np.log10(kr) - logrc
     pts_out = 10**(logkc + (np.arange(1, n+1) - nc)*dlogr)
 
     # rk = r_c/k_r; adjust for Fourier transform scaling
     rk = 10**(logrc - logkc)*np.pi/2
 
-    # Calculate required times/frequencies with the analytical solution
+    # Compute required times/frequencies with the analytical solution
     t2f_t_resp = empymod.analytical(**analytical, freqtime=pts_req,
                                     signal=signal)
     f2t_f_resp = empymod.analytical(**analytical, freqtime=pts_req)
