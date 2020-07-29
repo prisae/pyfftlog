@@ -39,9 +39,14 @@ mu = 0.5  # Choose -0.5 for cosine fourier transform
 # The unbiased transforms give better results as far as I checked.
 q = 0
 # Sensible approximate choice of f_c t_c
-# The output and the reconstruction is sensitive to the choice of this value.
-# I found this value with trial and error because the transform is now smooth
-# in freqnecy as sine only has one frequency.
+# The output and the reconstruction is sensitive to the choice of this value
+# This value is found by trial and error. In this example, the input function
+# is a simple sine function which is not smooth in frequency space (as it
+# only has one frequency) because of this reason a better value of this
+# quantity is not found by the function fhti. For functions smooth
+# in both time and frequency domain, the fhti should return the best
+# value of the f_c t_c.
+
 ft = 0.016
 
 # Tell fhti to change kr to low-ringing value
