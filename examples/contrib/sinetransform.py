@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 
 # Range of periodic interval
 logtmin = -3
-# logxmax = 0.798 #2pi
+# logtmax = 0.798 #2pi
 # 5(2pi) #Longer range in r gives you a better reconstruction. 10\pi will give
 # you a better reconstruction than 2\pi.
 logtmax = 1.497
@@ -54,7 +54,7 @@ q = 0
 
 ft = 0.016
 
-# Tell fhti to change kr to low-ringing value
+# Tell fhti to change ft to low-ringing value
 # WARNING: kropt = 3 will fail, as interaction is not supported
 ftopt = 1
 
@@ -65,7 +65,7 @@ tdir = 1
 # Computation related to the logarithmic spacing
 # ----------------------------------------------
 
-# Central point log10(r_c) of periodic interval
+# Central point log10(t_c) of periodic interval
 logtc = (logtmin + logtmax)/2
 
 print(f"Central point of periodic interval at log10(t_c) = {logtc}")
@@ -111,7 +111,7 @@ for i in range(len(t)):
        scipy.integrate.trapz(f, a_f*np.sin(t[i]*f))
 
 # Plotting the input function and the reconstructed input function and also
-# the distribution of the a(k) vs k.
+# the distribution of the a(f) vs f.
 plt.figure()
 
 ax1 = plt.subplot(121)
