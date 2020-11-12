@@ -1,35 +1,26 @@
-language: python
+name: pytest
 
-matrix:
-  include:
-    - python: 3.6
-      env: PYTHON=3.6
-    - python: 3.7
-      env: PYTHON=3.7 DEPLOY_PYPI=true
-    - python: 3.8
-      env: PYTHON=3.8
+on: [push]
 
-install:
-  - sudo apt-get update
-  # We do this conditionally because it saves us some downloading if the
-  # version is the same.
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update --all
-  # Useful for debugging any issues with conda
-  - conda info -a
+jobs:
+  build:
 
-  # Install and activate environment, install packages
-  - conda create -q -n test-environment python=$PYTHON $PCKGS scipy pytest pytest-cov
-  - source activate test-environment
-  - pip install setuptools_scm coveralls pytest-flake8 $INST
-  - python setup.py install
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
 
-script:
-  - pytest --cov=pyfftlog --flake8 $TEST
-
-after_success:
-  - coveralls
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        pip install -r requirements-dev.txt
+    - name: Test with pytest
+      run: |
+        pytest --cov=pyfftlog --flake8
