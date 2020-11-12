@@ -39,7 +39,10 @@ jobs:
     - name: Test with pytest
       run: |
         pytest --cov=pyfftlog --flake8
-        coveralls
+    - name: Coveralls
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: coveralls
     # - name: Coveralls Parallel
     #   # Hash corresponds to v1.1.2
     #   uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
