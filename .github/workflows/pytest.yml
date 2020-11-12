@@ -17,8 +17,6 @@ jobs:
 
     name: ${{ matrix.os }} py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
-    env:
-        COVERALLS_FLAG_NAME: run-${{ matrix.test_number }}
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
       # run all of them to catch failures in different combinations.
@@ -29,6 +27,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -47,6 +46,7 @@ jobs:
       uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: run-${{ matrix.python-version }}
         parallel: true
 
   coveralls:
