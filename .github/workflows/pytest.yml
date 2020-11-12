@@ -15,7 +15,7 @@ on:
 jobs:
   test:
 
-    name: ${{ matrix.os }} py${{ matrix.python }}
+    name: ${{ matrix.os }} py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
