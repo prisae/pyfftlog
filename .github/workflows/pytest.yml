@@ -37,7 +37,7 @@ jobs:
         pip install flake8 pytest
         pip install -r requirements-dev.txt
     - name: Test with pytest
-      with:
+      env:
         github-token: ${{ secrets.GITHUB_TOKEN }}
       run: |
         pytest --cov=pyfftlog --flake8
