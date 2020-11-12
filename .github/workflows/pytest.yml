@@ -38,19 +38,25 @@ jobs:
         pip install -r requirements-dev.txt
     - name: Test with pytest
       run: pytest --cov=pyfftlog --flake8
-      parallel: true
+    - name: Coveralls Parallel
+      # Hash corresponds to v1.1.2
+      uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: run-${{ matrix.python-version }}
+        parallel: true
 
   coveralls:
     needs: test
     name: Report to Coveralls
     runs-on: ubuntu-latest
     steps:
-      - name: Coveralls Finished
-        # Hash corresponds to v1.1.2
-        uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
+    - name: Coveralls Finished
+      # Hash corresponds to v1.1.2
+      uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
 
   deploy:
     needs: test
@@ -61,48 +67,48 @@ jobs:
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          # Need to fetch more than the last commit so that setuptools_scm can
-          # create the correct version string. If the number of commits since
-          # the last release is greater than this, the version will still be
-          # wrong. Increase if necessary.
-          fetch-depth: 100
-          # The GitHub token is preserved by default but this job doesn't need
-          # to be able to push to GitHub.
-          persist-credentials: false
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        # Need to fetch more than the last commit so that setuptools_scm can
+        # create the correct version string. If the number of commits since
+        # the last release is greater than this, the version will still be
+        # wrong. Increase if necessary.
+        fetch-depth: 100
+        # The GitHub token is preserved by default but this job doesn't need
+        # to be able to push to GitHub.
+        persist-credentials: false
 
-      # Need the tags so that setuptools_scm can form a valid version number
-      - name: Fetch git tags
-        run: git fetch origin 'refs/tags/*:refs/tags/*'
+    # Need the tags so that setuptools_scm can form a valid version number
+    - name: Fetch git tags
+      run: git fetch origin 'refs/tags/*:refs/tags/*'
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
 
-      - name: Build source and wheel distributions
-        run: |
-          pip install setuptools_scm scipy
-          python setup.py install
+    - name: Build source and wheel distributions
+      run: |
+        pip install setuptools_scm scipy
+        python setup.py install
 
-      - name: Publish to Test PyPI
-        if: success()
-        # Hash corresponds to v1.4.1
-        uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
-        with:
-          user: __token__
-          password: ${{ secrets.TEST_PYPI_TOKEN}}
-          repository_url: https://test.pypi.org/legacy/
-          # Allow existing releases on test PyPI without errors.
-          # NOT TO BE USED in PyPI!
-          skip_existing: true
+    - name: Publish to Test PyPI
+      if: success()
+      # Hash corresponds to v1.4.1
+      uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
+      with:
+        user: __token__
+        password: ${{ secrets.TEST_PYPI_TOKEN}}
+        repository_url: https://test.pypi.org/legacy/
+        # Allow existing releases on test PyPI without errors.
+        # NOT TO BE USED in PyPI!
+        skip_existing: true
 
-      - name: Publish to PyPI
-        if: success()
-        # Hash corresponds to v1.4.1
-        uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN}}
+    - name: Publish to PyPI
+      if: success()
+      # Hash corresponds to v1.4.1
+      uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_TOKEN}}
