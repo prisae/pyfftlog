@@ -40,11 +40,59 @@ jobs:
       run: |
         pytest --cov=pyfftlog --flake8
 
-#   finish:
-#     needs: test
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: Coveralls Finished
-#       uses: coverallsapp/github-action@master
-#       with:
-#         github-token: ${{ secrets.GITHUB_TOKEN }}
+  # coveralls:
+  #   TODO
+
+  deploy:
+
+    name: Deploy to PyPI
+    needs: test
+    runs-on: ubuntu-latest
+    # Only for releases and only from the origin repository, not forks
+    if: github.event_name == 'release' && github.repository_owner == 'prisae'
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Need to fetch more than the last commit so that setuptools_scm can
+          # create the correct version string. If the number of commits since
+          # the last release is greater than this, the version will still be
+          # wrong. Increase if necessary.
+          fetch-depth: 100
+          # The GitHub token is preserved by default but this job doesn't need
+          # to be able to push to GitHub.
+          persist-credentials: false
+
+      # Need the tags so that setuptools_scm can form a valid version number
+      - name: Fetch git tags
+        run: git fetch origin 'refs/tags/*:refs/tags/*'
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Build source and wheel distributions
+        run: |
+          pip install setuptools_scm scipy
+          python setup.py install
+
+      - name: Publish to Test PyPI
+        if: success()
+        uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
+        with:
+          user: __token__
+          password: ${{ secrets.TEST_PYPI_TOKEN}}
+          repository_url: https://test.pypi.org/legacy/
+          # Allow existing releases on test PyPI without errors.
+          # NOT TO BE USED in PyPI!
+          skip_existing: true
+
+      - name: Publish to PyPI
+        if: success()
+        uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN}}
