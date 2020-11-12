@@ -38,27 +38,28 @@ jobs:
         pip install -r requirements-dev.txt
     - name: Test with pytest
       run: |
-        pytest --cov=pyfftlog --flake8 --cov-report xml
-    - name: Coveralls Parallel
-      # Hash corresponds to v1.1.2
-      uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: coverage.xml
-        flag-name: py-${{ matrix.python-version }}
-        parallel: true
+        pytest --cov=pyfftlog --flake8
+        coveralls
+    # - name: Coveralls Parallel
+    #   # Hash corresponds to v1.1.2
+    #   uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     path-to-lcov: coverage.xml
+    #     flag-name: py-${{ matrix.python-version }}
+    #     parallel: true
 
-  coveralls:
-    needs: test
-    name: Report to Coveralls
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      # Hash corresponds to v1.1.2
-      uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel-finished: true
+  # coveralls:
+  #   needs: test
+  #   name: Report to Coveralls
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Coveralls Finished
+  #     # Hash corresponds to v1.1.2
+  #     uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
+  #     with:
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #       parallel-finished: true
 
   deploy:
     needs: test
