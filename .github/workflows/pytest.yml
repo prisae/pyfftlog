@@ -1,7 +1,5 @@
 language: python
 
-# Note: the `python: X.Y` is not actually used, as internally conda is used,
-# which follows the `PYTHON=X.Y` var.
 matrix:
   include:
     - python: 3.6
@@ -35,14 +33,3 @@ script:
 
 after_success:
   - coveralls
-
-deploy:
-  provider: pypi
-  user: "__token__"
-  password:
-    secure: HQvbd1KJu6jPhQZeTAbW5Gv0TDOm7QLFMusYUahOsfAdnsHTZyKs5PD2AXeREBAOJAjPpF68kO/tBKKWtqkSzQR23+gEFIkeU7pezBAx2LBCXzZRygJCeu7Vr2hwAqlQTqiunvY1ddYiLZg5Wo9LtpEIp2aZyr5aYUkyGsyxb148G5XPOPOH7lfpI/2P4i546zOVoEGh1IBaemkeo3tUGqAnscb4uTikuit/bnZPqKrw8szfwN6QIkX6hsXl1t8Bu105kc9pLkHHlO2gRYDC/CsRdEfALvIa4oJslCcV8hdzIzoYTnQjSHC2Z9+dje101xNd+TUEBvSZY5bi9ov060qm3dFPdy4pRjVjg+iX5x7lwE9BbWxNzJVOTpHG9MDDhjRoXjSL2otQ3huMDdnlgsnjfueMH5NZmR0dVneRkFrLbiLp7kuYCIpSMJ69CAM32Z/NKjvWRIum4hiRbv7Ut8mzARKKlkD2kfMznYM9dEmS7B/oYsqbHwZZI9G6k3v9chAAyXhky9XZDC0V0orjZUqFa44cy2ASvO+EmSUfL0p2OuT5hC5mIrDNZ6orTWGzFjUYKRbgGs6cwE5ondgI1rr7Rt3zbwulTdq32j/Mz7lCTNI8Uo63c2Z0rsCWMN28E/JsLD+nlabgPFLigvTNpIa7GEeb3Yr/h5KydGrwr+M=
-  on:
-    branch: master
-    tags: true
-    condition: '$DEPLOY_PYPI = "true"'
-  distributions: "sdist bdist_wheel"
