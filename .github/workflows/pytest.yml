@@ -40,8 +40,11 @@ jobs:
       run: |
         pytest --cov=pyfftlog --flake8
 
-  # coveralls:
-  #   TODO
+    - name: Coveralls
+      # Hash corresponds to v1.1.2
+      uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
 
@@ -81,6 +84,7 @@ jobs:
 
       - name: Publish to Test PyPI
         if: success()
+        # Hash corresponds to v1.4.1
         uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
         with:
           user: __token__
@@ -92,6 +96,7 @@ jobs:
 
       - name: Publish to PyPI
         if: success()
+        # Hash corresponds to v1.4.1
         uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
         with:
           user: __token__
