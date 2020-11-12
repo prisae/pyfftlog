@@ -37,16 +37,14 @@ jobs:
         pip install flake8 pytest
         pip install -r requirements-dev.txt
     - name: Test with pytest
-      env:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        pytest --cov=pyfftlog --flake8
-        coveralls
+        pytest --cov=pyfftlog --flake8 --cov-report xml
     - name: Coveralls Parallel
       # Hash corresponds to v1.1.2
       uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: coverage.xml
         flag-name: py-${{ matrix.python-version }}
         parallel: true
 
