@@ -1,9 +1,9 @@
 .. image:: https://readthedocs.org/projects/pyfftlog/badge/?version=latest
    :target: https://pyfftlog.readthedocs.io/en/latest
    :alt: Documentation Status
-.. image:: https://travis-ci.org/prisae/pyfftlog.svg?branch=master
-   :target: https://travis-ci.org/prisae/pyfftlog
-   :alt: Travis-CI
+.. image:: https://github.com/prisae/pyfftlog/workflows/pytest/badge.svg?branch=master
+   :target: https://github.com/prisae/pyfftlog/actions
+   :alt: GitHub Actions
 .. image:: https://coveralls.io/repos/github/prisae/pyfftlog/badge.svg?branch=master
    :target: https://coveralls.io/github/prisae/pyfftlog?branch=master
    :alt: Coveralls
