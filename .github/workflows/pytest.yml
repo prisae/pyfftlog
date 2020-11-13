@@ -31,14 +31,30 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
         pip install -r requirements-dev.txt
+
     - name: Test with pytest
       run: |
         pytest --cov=pyfftlog --flake8
+
+    - name: Coveralls
+      uses: AndreMiras/coveralls-python-action@4df6e2e1adfb34a7dd43bc9889f6f6144d005544
+      with:
+        parallel: true
+
+  coveralls_finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: AndreMiras/coveralls-python-action@4df6e2e1adfb34a7dd43bc9889f6f6144d005544
+      with:
+        parallel-finished: true`
     # - name: Coveralls Parallel
     #   # Hash corresponds to v1.1.2
     #   uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
