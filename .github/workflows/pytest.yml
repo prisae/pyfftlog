@@ -54,7 +54,7 @@ jobs:
     - name: Coveralls Finished
       uses: AndreMiras/coveralls-python-action@4df6e2e1adfb34a7dd43bc9889f6f6144d005544
       with:
-        parallel-finished: true`
+        parallel-finished: true
     # - name: Coveralls Parallel
     #   # Hash corresponds to v1.1.2
     #   uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
