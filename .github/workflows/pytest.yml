@@ -78,8 +78,8 @@ jobs:
     needs: test
     name: Deploy to PyPI
     runs-on: ubuntu-latest
-    # Only from the origin repository, not forks
-    if: github.repository_owner == 'prisae'
+    # Only from the origin repository, not forks; only master.
+    if: github.repository_owner == 'prisae' && github.ref == 'refs/heads/master'
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
@@ -118,7 +118,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
         with:
           user: __token__
-          password: ${{ secrets.TEST_PYPI_TOKEN}}
+          password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository_url: https://test.pypi.org/legacy/
           # Allow existing releases on test PyPI without errors.
           # NOT TO BE USED in PyPI!
@@ -131,4 +131,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806
         with:
           user: __token__
-          password: ${{ secrets.PYPI_TOKEN}}
+          password: ${{ secrets.PYPI_TOKEN }}
