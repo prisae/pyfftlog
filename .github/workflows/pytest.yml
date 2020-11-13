@@ -117,7 +117,8 @@ jobs:
           # compatible with Test PyPI.
           sed --in-place "s/'root'/'local_scheme':'no-local-version','root'/g" setup.py
           # Build source and wheel packages
-          python setup.py install
+          python setup.py sdist
+          python setup.py bdist_wheel
           echo ""
           echo "Generated files:"
           ls -lh dist/
