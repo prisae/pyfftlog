@@ -79,7 +79,8 @@ jobs:
     name: Deploy to PyPI
     runs-on: ubuntu-latest
     # Only from the origin repository, not forks; only master.
-    if: github.repository_owner == 'prisae' && github.ref == 'refs/heads/master'
+    # if: github.repository_owner == 'prisae' && github.ref == 'refs/heads/master'
+    if: github.repository_owner == 'prisae'
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
@@ -110,7 +111,16 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Build source and wheel distributions
-        run: python setup.py install
+        run: |
+          # Change setuptools-scm local_scheme to "no-local-version" so the
+          # local part of the version isn't included, making the version string
+          # compatible with Test PyPI.
+          sed --in-place "s/'root'/'local_scheme':'no-local-version','root'/g" setup.py
+          # Build source and wheel packages
+          python setup.py install
+          echo ""
+          echo "Generated files:"
+          ls -lh dist/
 
       - name: Publish to Test PyPI
         if: success()
