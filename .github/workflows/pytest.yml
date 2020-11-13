@@ -17,6 +17,7 @@ jobs:
 
     name: ${{ matrix.os }} py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
+
     strategy:
       # Otherwise, the workflow would stop if a single job fails. We want to
       # run all of them to catch failures in different combinations.
@@ -27,22 +28,32 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
         pip install -r requirements-dev.txt
-    - name: Test with pytest
+
+    - name: PyTest
+      run: |
+        pytest --cov=pyfftlog --flake8 --cov-append
+
+  coveralls:
+    needs: test
+    name: Report to Coveralls
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Parallel
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        pytest --cov=pyfftlog --flake8
-        coveralls
-    # - name: Coveralls Parallel
+      run: coveralls
+
     #   # Hash corresponds to v1.1.2
     #   uses: coverallsapp/github-action@8cbef1dea373ebce56de0a14c68d6267baa10b44
     #   with:
