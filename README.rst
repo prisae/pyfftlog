@@ -5,7 +5,7 @@
    :target: https://github.com/prisae/pyfftlog/actions
    :alt: GitHub Actions
 .. image:: https://codecov.io/gh/prisae/pyfftlog/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/prisae/pyfftlog
+   :target: https://codecov.io/gh/prisae/pyfftlog
    :alt: CodeCov
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3830364.svg
    :target: https://doi.org/10.5281/zenodo.3830364
