@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - master
+      - dev
   release:
     types:
       - published
@@ -22,7 +23,7 @@ jobs:
         python-version: [3.6, 3.7, 3.8]
 
     env:
-      # Used to tag CodeCov submissions
+      # Used for coveralls flag
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
 
@@ -62,17 +63,24 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Test with pytest
-        run: pytest --cov=pyfftlog --flake8 --cov-report xml
+        run: pytest --cov=pyfftlog --flake8
 
-      - name: Upload coverage to CodeCov
-        uses: codecov/codecov-action@v1
+      - name: Coveralls
+        # [pin v20201129]
+        uses: AndreMiras/coveralls-python-action@f5fd5c309b39d01599fb92c72d4f7409ea78aec9
         with:
-          file: ./coverage.xml
-          env_vars: OS,PYTHON
-          # Don't mark the job as failed if the upload fails for some reason.
-          # It does sometimes but shouldn't be the reason for running
-          # everything again unless something else is broken.
-          fail_ci_if_error: false
+          parallel: true
+          flag-name: OS,PYTHON
+
+  coveralls_finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      # [pin v20201129]
+      uses: AndreMiras/coveralls-python-action@f5fd5c309b39d01599fb92c72d4f7409ea78aec9
+      with:
+        parallel-finished: true
 
   deploy:
     needs: test

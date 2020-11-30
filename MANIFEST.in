@@ -5,3 +5,4 @@ exclude requirements.txt
 exclude requirements-dev.txt
 exclude .readthedocs.yml
 exclude .gitignore
+exclude .coveragerc
