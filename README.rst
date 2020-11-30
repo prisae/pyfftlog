@@ -4,9 +4,9 @@
 .. image:: https://github.com/prisae/pyfftlog/workflows/pytest/badge.svg?branch=master
    :target: https://github.com/prisae/pyfftlog/actions
    :alt: GitHub Actions
-.. image:: https://codecov.io/gh/prisae/pyfftlog/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/prisae/pyfftlog
-   :alt: CodeCov
+.. image:: https://coveralls.io/repos/github/prisae/pyfftlog/badge.svg?branch=master
+   :target: https://coveralls.io/github/prisae/pyfftlog?branch=master
+   :alt: Coveralls
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3830364.svg
    :target: https://doi.org/10.5281/zenodo.3830364
    :alt: Zenodo DOI
